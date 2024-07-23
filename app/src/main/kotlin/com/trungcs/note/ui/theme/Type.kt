@@ -1,4 +1,4 @@
-package com.trungcs.myapplication.ui.theme
+package com.trungcs.note.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

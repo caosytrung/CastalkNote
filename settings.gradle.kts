@@ -16,7 +16,9 @@ dependencyResolutionManagement {
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-rootProject.name = "ModernAndroidTemplate"
+rootProject.name = "CasTalkNote"
 include(":app")
 include(":model")
 include(":database")
+include(":data")
+include(":common")

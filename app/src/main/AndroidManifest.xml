@@ -11,13 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name="com.trungcs.note.NoteApplication"
-        android:theme="@style/Theme.ModernAndroidTemplate"
+        android:theme="@style/Theme.NoteTemplate"
         tools:targetApi="31">
         <activity
             android:name="com.trungcs.note.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ModernAndroidTemplate">
+            android:theme="@style/Theme.NoteTemplate">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
