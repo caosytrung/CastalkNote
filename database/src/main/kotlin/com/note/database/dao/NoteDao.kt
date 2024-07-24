@@ -9,6 +9,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 
+    // Get a single note by id
+    @Query(
+        value = """
+        SELECT * FROM notes
+        WHERE id = :noteId
+    """,
+    )
+    suspend fun getNoteEntity(noteId: Int): NoteEntity
+
     // Get and observe all notes from databases by using Flow.
     @Query(value = "SELECT * FROM notes")
     fun getAllTopicEntities(): Flow<List<NoteEntity>>

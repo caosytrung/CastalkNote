@@ -7,16 +7,20 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.trungcs.myapplication.R
 import com.trungcs.note.ui.detail.route.detailScreen
 import com.trungcs.note.ui.detail.route.navigateToDetail
 import com.trungcs.note.ui.list.route.LIST_ROUTE
 import com.trungcs.note.ui.list.route.listScreen
 import com.trungcs.note.ui.theme.NoteTheme
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -24,11 +28,13 @@ fun NoteApp(
     navController: NavHostController = rememberNavController()
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(snackBarHostState) },
     ) { innerPadding ->
+        val errorText = stringResource(id = R.string.enter_title_message)
 
         NavHost(
             navController = navController,
@@ -36,7 +42,14 @@ fun NoteApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             listScreen { navController.navigateToDetail(it) }
-            detailScreen { navController.popBackStack() }
+            detailScreen(
+                onBackClick = { navController.popBackStack() },
+                onEmptyTitleError = {
+                    coroutineScope.launch {
+                        snackBarHostState.showSnackbar(errorText)
+                    }
+                }
+            )
         }
     }
 }

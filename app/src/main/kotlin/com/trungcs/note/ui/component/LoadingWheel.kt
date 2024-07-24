@@ -35,7 +35,7 @@ import com.trungcs.note.ui.theme.NoteTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun NiaLoadingWheel(
+fun LoadingWheel(
     contentDesc: String,
     modifier: Modifier = Modifier,
 ) {
@@ -127,7 +127,7 @@ fun NiaOverlayLoadingWheel(
         modifier = modifier
             .size(60.dp),
     ) {
-        NiaLoadingWheel(
+        LoadingWheel(
             contentDesc = contentDesc,
         )
     }
@@ -137,7 +137,7 @@ fun NiaOverlayLoadingWheel(
 fun NiaLoadingWheelPreview() {
     NoteTheme {
         Surface {
-            NiaLoadingWheel(contentDesc = "LoadingWheel")
+            LoadingWheel(contentDesc = "LoadingWheel")
         }
     }
 }

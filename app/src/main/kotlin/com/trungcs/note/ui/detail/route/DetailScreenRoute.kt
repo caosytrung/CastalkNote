@@ -19,6 +19,7 @@ fun NavController.navigateToDetail(noteId: Int, navOptions: NavOptions? = null) 
 
 fun NavGraphBuilder.detailScreen(
     onBackClick: OnButtonClick,
+    onEmptyTitleError: () -> Unit,
 ) {
     composable(
         route = DETAIL_ROUTE,
@@ -31,7 +32,8 @@ fun NavGraphBuilder.detailScreen(
         ),
     ) {
         DetailScreen(
-            onBackClick = onBackClick
+            onBackToList = onBackClick,
+            onEmptyTitleError = onEmptyTitleError,
         )
     }
 }

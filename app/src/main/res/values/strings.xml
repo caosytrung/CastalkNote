@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Castalk Note</string>
+    <string name="save">Save</string>
+    <string name="enter_title_message">Please enter the title</string>
+    <string name="list_note_title">Hello mate!</string>
+    <string name="enter_title">Enter title</string>
+    <string name="enter_note">Enter note</string>
 </resources>

@@ -27,6 +27,8 @@ android {
 
 dependencies {
     implementation(projects.database)
+    implementation(projects.data)
+    implementation(projects.common)
 
     implementation(libs.androidx.core.ktx)
 
@@ -42,6 +44,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.navigationSuite)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui.util)
+    implementation(libs.androidx.compose.material.iconsExtended)
 
     ksp(libs.hilt.compiler)
 }

@@ -14,6 +14,10 @@ import javax.inject.Inject
 internal class LocalNoteRepository @Inject constructor(
     private val noteDao: NoteDao
 ) : NoteRepository {
+    override suspend fun getNoteById(id: Int): Result<Note> = result {
+        noteDao.getNoteEntity(id).toModel()
+    }
+
     override fun getAllTopicEntities(): Flow<Result<List<Note>>> =
         noteDao.getAllTopicEntities()
             .map { it.map(NoteEntity::toModel) }
