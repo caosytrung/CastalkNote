@@ -24,6 +24,7 @@ fun RandomColorCard(
     }
 }
 
+// add more colors to make our note more colorful :D
 private val randomColors = listOf(
     Color(0xFFFCA591),
     Color(0xFFFFFFA1),
