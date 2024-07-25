@@ -34,6 +34,12 @@ class ListViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteNote(noteId: Int) {
+        viewModelScope.launch {
+            noteRepository.deleteNotes(listOf(noteId))
+        }
+    }
 }
 
 sealed interface ListUiState {

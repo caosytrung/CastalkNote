@@ -1,5 +1,6 @@
 package com.trungcs.note.ui.list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,11 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +26,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,9 +53,33 @@ fun ListNoteScreen(
 ) {
     val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle()
 
+    // showDeleteDialog stores a pair of values.
+    // first stores a flag to open/close the dialog
+    // second stores the id of the note
+    var showDeleteDialog by remember { mutableStateOf(false to 0) }
+    if (showDeleteDialog.first) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false to 0 },
+            title = { Text(stringResource(id = R.string.confirm_delete)) },
+            text = { Text(stringResource(id = R.string.are_you_sure_to_delete_note)) },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.deleteNote(showDeleteDialog.second)
+                    showDeleteDialog = false to 0
+                }) {
+                    Text(stringResource(id = R.string.delete))
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showDeleteDialog = false to 0 }) {
+                    Text(stringResource(id = R.string.cancel))
+                }
+            }
+        )
+    }
+
     Column {
         ListAppBar()
-
         Box(modifier = Modifier.fillMaxSize()) {
             when (uiState) {
                 is ListUiState.Loading -> LoadingWheel(
@@ -57,9 +89,10 @@ fun ListNoteScreen(
 
                 is ListUiState.Error -> TODO()
                 is ListUiState.Success -> ListNoteBody(
-                    onSelectNoteClick = { onSelectNoteClick(it) },
                     onCreateNewNodeClick = { onSelectNoteClick(CREATE_NEW_NOTE_ID) },
-                    (uiState as ListUiState.Success).listNotes
+                    onSelectNoteClick = onSelectNoteClick,
+                    onDeleteNoteClick = { showDeleteDialog = true to it },
+                    notes = (uiState as ListUiState.Success).listNotes
                 )
             }
         }
@@ -97,6 +130,7 @@ fun ListAppBar() {
 @Composable
 fun ListNoteBody(
     onSelectNoteClick: (Int) -> Unit,
+    onDeleteNoteClick: (Int) -> Unit,
     onCreateNewNodeClick: OnButtonClick,
     notes: List<Note>,
 ) {
@@ -108,9 +142,11 @@ fun ListNoteBody(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(notes) {
-                NoteItem(note = it) {
-                    onSelectNoteClick.invoke(it)
-                }
+                NoteItem(
+                    note = it,
+                    onSelectNoteClick = onSelectNoteClick,
+                    onDeleteNoteClick = onDeleteNoteClick,
+                )
             }
         }
 
@@ -127,34 +163,46 @@ fun ListNoteBody(
 }
 
 @Composable
-fun NoteItem(note: Note, onSelectNoteClick: (Int) -> Unit) {
-    RandomColorCard(onCardClick = {
-        onSelectNoteClick.invoke(note.id)
-    }) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(24.dp),
-        ) {
-            Text(
-                text = note.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.Black,
-            )
-            Spacer(Modifier.height(12.dp))
-            Text(
-                text = note.content,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 6,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.Black,
+fun NoteItem(note: Note, onSelectNoteClick: (Int) -> Unit, onDeleteNoteClick: (Int) -> Unit) {
+    RandomColorCard(onCardClick = { onSelectNoteClick.invoke(note.id) }) {
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+            ) {
+                Text(
+                    text = note.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Black,
+                    maxLines = 4
+                )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = note.content,
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 6,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black,
+                )
+            }
+
+            Icon(
+                modifier = Modifier
+                    .width(28.dp)
+                    .padding(4.dp)
+                    .align(Alignment.TopEnd)
+                    .clickable { onDeleteNoteClick(note.id) },
+                imageVector = Icons.Default.Delete,
+                tint = Color.Black.copy(alpha = 0.5f),
+                contentDescription = "deleteIcon"
             )
         }
     }
 }
 
 
-@Preview
+@Preview(heightDp = 128)
 @Composable
 fun AppBarPreview() {
     NoteTheme {
@@ -177,9 +225,12 @@ fun ListScreenPreview() {
             modifier = Modifier.fillMaxSize()
         ) {
             ListNoteBody(
-                onSelectNoteClick = {}, onCreateNewNodeClick = {}, notes = listOf(
+                onSelectNoteClick = {},
+                onCreateNewNodeClick = {},
+                onDeleteNoteClick = {},
+                notes = listOf(
                     Note(
-                        title = "Title 1",
+                        title = "TitleTitleTitleTitleTitle",
                         content = "To set a fixed number of columns, you can use"
                     ),
                     Note(
@@ -189,22 +240,6 @@ fun ListScreenPreview() {
                     Note(
                         title = "Title 1",
                         content = "Please note that this padding is applied to the content, not to the LazyColumn itself. In the example above, the first item will add 8.dp padding to it’s top, the last item will add 8.dp to its bottom, and all items will have 16.dp padding on the left and the right."
-                    ),
-                    Note(
-                        title = "Title 1",
-                        content = "To set a fixed number of columns, you can use"
-                    ),
-                    Note(
-                        title = "Title 1",
-                        content = "To set a fixed number of columns, you can use"
-                    ),
-                    Note(
-                        title = "Title 1",
-                        content = "To set a fixed number of columns, you can use"
-                    ),
-                    Note(
-                        title = "Title 1",
-                        content = "To set a fixed number of columns, you can use"
                     ),
                     Note(
                         title = "Title 1",

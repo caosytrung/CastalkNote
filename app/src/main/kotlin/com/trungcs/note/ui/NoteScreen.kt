@@ -3,14 +3,17 @@ package com.trungcs.note.ui
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -32,7 +35,16 @@ fun NoteApp(
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(snackBarHostState) {
+                Snackbar(
+                    it,
+                    containerColor = Color.Yellow,
+                    contentColor = Color.Black,
+                    modifier = Modifier.padding(bottom = 64.dp)
+                )
+            }
+        },
     ) { innerPadding ->
         val errorText = stringResource(id = R.string.enter_title_message)
 
@@ -43,7 +55,9 @@ fun NoteApp(
         ) {
             listScreen { navController.navigateToDetail(it) }
             detailScreen(
-                onBackClick = { navController.popBackStack() },
+                onBackClick = {
+                    navController.popBackStack()
+                },
                 onEmptyTitleError = {
                     coroutineScope.launch {
                         snackBarHostState.showSnackbar(errorText)

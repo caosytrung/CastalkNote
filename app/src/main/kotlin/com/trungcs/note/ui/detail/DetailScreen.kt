@@ -134,17 +134,44 @@ fun DetailAppBar(onSaveClick: OnButtonClick, onBackClick: OnButtonClick, isSavab
     ) {
         IconButton(enabled = isSavable, onClick = onBackClick) {
             Icon(
+
                 imageVector = Icons.Rounded.Close,
                 tint = Color.White,
                 contentDescription = "backIcon"
             )
         }
 
+        Text(
+            maxLines = 1,
+            text = stringResource(id = R.string.note_detail),
+            style = MaterialTheme.typography.titleLarge,
+            color = Color.White
+        )
+
         TextButton(enabled = true, onClick = onSaveClick) {
             Text(text = stringResource(id = R.string.save), color = Color.White)
         }
     }
 }
+
+@Preview(heightDp = 60)
+@Composable
+fun AppbarPreview() {
+    Surface(
+        color = Color.Black,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        NoteTheme {
+            DetailAppBar(
+                onSaveClick = {},
+                onBackClick = {},
+                isSavable = true
+
+            )
+        }
+    }
+}
+
 
 @Preview
 @Composable

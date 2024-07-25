@@ -81,9 +81,6 @@ class DetailViewModel @Inject constructor(
             if (currentState !is DetailUiState.Success) {
                 return@launch
             }
-            if (!currentState.isChanged()) {
-                return@launch
-            }
 
             if (currentState.isTitleEmpty()) {
                 _uiStateFlow.value = currentState.copy(isEmptyTitleError = true)
@@ -119,7 +116,6 @@ sealed interface DetailUiState {
         val isDone: Boolean = false,
 
         ) : DetailUiState {
-        fun isChanged() = note == null || note.title != newTitle || note.content != newContent
 
         fun isTitleEmpty() = newTitle.isEmpty()
     }
@@ -128,7 +124,7 @@ sealed interface DetailUiState {
 
     data object Loading : DetailUiState
 
-    fun isSaveAble() = this is Success && !isTitleEmpty() && isChanged()
+    fun isSaveAble() = this is Success && !isTitleEmpty()
 }
 
 
