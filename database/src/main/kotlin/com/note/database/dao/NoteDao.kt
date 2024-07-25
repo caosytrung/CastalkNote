@@ -20,11 +20,11 @@ interface NoteDao {
 
     // Get and observe all notes from databases by using Flow.
     @Query(value = "SELECT * FROM notes")
-    fun getAllTopicEntities(): Flow<List<NoteEntity>>
+    fun getAllNoteEntities(): Flow<List<NoteEntity>>
 
     // Inserts or updates [entities] in the db under the specified primary keys
     @Upsert
-    suspend fun upsertTopic(entities: NoteEntity)
+    suspend fun upsertNote(entities: NoteEntity)
 
     // Deletes rows in the db matching the specified [ids]
     @Query(
@@ -34,8 +34,4 @@ interface NoteDao {
         """,
     )
     suspend fun deleteNotes(ids: List<Int>)
-
-    // Deletes all data
-    @Query(value = "DELETE FROM notes")
-    suspend fun deleteAll()
 }

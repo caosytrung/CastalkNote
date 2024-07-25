@@ -18,21 +18,17 @@ internal class LocalNoteRepository @Inject constructor(
         noteDao.getNoteEntity(id).toModel()
     }
 
-    override fun getAllTopicEntities(): Flow<Result<List<Note>>> =
-        noteDao.getAllTopicEntities()
+    override fun getAllNoteEntities(): Flow<Result<List<Note>>> =
+        noteDao.getAllNoteEntities()
             .map { it.map(NoteEntity::toModel) }
             .asResult()
 
-    override suspend fun upsertTopic(note: Note) = result {
-        noteDao.upsertTopic(note.toEntity())
+    override suspend fun upsertNote(note: Note) = result {
+        noteDao.upsertNote(note.toEntity())
     }
 
     override suspend fun deleteNotes(ids: List<Int>) = result {
         noteDao.deleteNotes(ids)
-    }
-
-    override suspend fun deleteAll() = result {
-        noteDao.deleteAll()
     }
 }
 

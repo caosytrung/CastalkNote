@@ -55,7 +55,7 @@ fun DetailScreen(
                 state = uiState as DetailUiState.Success,
                 onEmptyTitleError = {
                     onEmptyTitleError()
-                    viewModel.turnOffEmptyTitleError()
+                    viewModel.clearEmptyTitleError()
                 },
                 onTitleChange = viewModel::onTitleChange,
                 onContentChange = viewModel::onContentChange,

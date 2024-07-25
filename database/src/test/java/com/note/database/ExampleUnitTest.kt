@@ -1,4 +1,4 @@
-package com.example.datastore
+package com.note.database
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

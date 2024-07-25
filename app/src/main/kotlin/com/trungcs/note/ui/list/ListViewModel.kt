@@ -23,7 +23,7 @@ class ListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            noteRepository.getAllTopicEntities().mapLatest { result ->
+            noteRepository.getAllNoteEntities().mapLatest { result ->
                 when (result) {
                     is Result.Error -> ListUiState.Error
                     is Result.Loading -> ListUiState.Loading

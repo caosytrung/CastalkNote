@@ -54,7 +54,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun turnOffEmptyTitleError() {
+    fun clearEmptyTitleError() {
         val currentState = _uiStateFlow.value
         if (currentState is DetailUiState.Success) {
             _uiStateFlow.value = currentState.copy(isEmptyTitleError = false)
@@ -95,7 +95,7 @@ class DetailViewModel @Inject constructor(
 
             )
 
-            val result = noteRepo.upsertTopic(updatingNote)
+            val result = noteRepo.upsertNote(updatingNote)
             if (result is Result.Success) {
                 _uiStateFlow.value = currentState.copy(
                     isDone = true,

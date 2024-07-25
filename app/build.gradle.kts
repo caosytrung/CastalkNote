@@ -47,4 +47,11 @@ dependencies {
     implementation(libs.androidx.compose.material.iconsExtended)
 
     ksp(libs.hilt.compiler)
+
+
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.runner)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.kotlin.mockito.kotlin)
 }
