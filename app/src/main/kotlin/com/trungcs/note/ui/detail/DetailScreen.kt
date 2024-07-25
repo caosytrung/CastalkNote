@@ -134,7 +134,6 @@ fun DetailAppBar(onSaveClick: OnButtonClick, onBackClick: OnButtonClick, isSavab
     ) {
         IconButton(enabled = isSavable, onClick = onBackClick) {
             Icon(
-
                 imageVector = Icons.Rounded.Close,
                 tint = Color.White,
                 contentDescription = "backIcon"

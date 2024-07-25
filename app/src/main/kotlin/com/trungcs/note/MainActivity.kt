@@ -14,11 +14,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NoteTheme(
-                darkTheme = true
-            ) {
-                NoteApp()
-            }
+            NoteTheme(darkTheme = true) { NoteApp() }
         }
     }
 }

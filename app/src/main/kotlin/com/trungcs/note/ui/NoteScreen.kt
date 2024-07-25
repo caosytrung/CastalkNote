@@ -55,13 +55,9 @@ fun NoteApp(
         ) {
             listScreen { navController.navigateToDetail(it) }
             detailScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                },
+                onBackClick = { navController.popBackStack() },
                 onEmptyTitleError = {
-                    coroutineScope.launch {
-                        snackBarHostState.showSnackbar(errorText)
-                    }
+                    coroutineScope.launch { snackBarHostState.showSnackbar(errorText) }
                 }
             )
         }
